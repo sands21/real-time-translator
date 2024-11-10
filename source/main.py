@@ -93,6 +93,7 @@ st.markdown(
         overflow-y: auto;
         backdrop-filter: blur(10px); 
         -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
     }}
     div.element-container div.stMarkdown p {{
         margin-bottom: 10px;
