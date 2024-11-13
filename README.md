@@ -1,4 +1,3 @@
-````markdown
 # 🌍 Language Translator Web App
 
 ![Demo Video](https://drive.google.com/file/d/1JHs56RI5nN4PrLU3GDzfWEREVOWCw4IF/view?usp=sharing)
@@ -28,7 +27,6 @@ Check out the video above to see the app in action!
 ```bash
 pip install streamlit pygame gTTS googletrans==3.1.0a0 SpeechRecognition
 ```
-````
 
 ### Running the Application
 
