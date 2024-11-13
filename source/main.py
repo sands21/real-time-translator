@@ -38,7 +38,7 @@ def text_to_voice(text_data, to_language):
 
 def main_process(output_placeholder, from_language, to_language):
     global is_translate_on
-    
+
     if "conversation" not in st.session_state:
         st.session_state.conversation = []
 
@@ -46,7 +46,7 @@ def main_process(output_placeholder, from_language, to_language):
         rec = sr.Recognizer()
         with sr.Microphone() as source:
             rec.pause_threshold = 1
-            audio = rec.listen(source, phrase_time_limit=20)
+            audio = rec.listen(source, phrase_time_limit=300)
 
     try:
         with st.spinner('Processing...'):
@@ -55,20 +55,27 @@ def main_process(output_placeholder, from_language, to_language):
 
         with st.spinner('Translating...'):
             translated_text = translator_function(spoken_text, from_language, to_language)
-            
+
         # Update conversation history immediately after translation
-        st.session_state.conversation.append(f"From Language: {spoken_text}")
-        st.session_state.conversation.append(f"Translated: {translated_text}")
+        st.session_state.conversation.append(f"""
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1;"><b>From Language:</b> {spoken_text}</div>
+                <div style="flex: 1; text-align: right;"><b>Translated:</b> {translated_text}</div>
+            </div>
+        """)
+
+        # Display translated text in a prominent area above the history
+        st.markdown(f"<h2 style='color: #fff;'>Translated Text: {translated_text}</h2>", unsafe_allow_html=True)
 
         with st.spinner('Generating audio...'):
             text_to_voice(translated_text, to_language)
-            
+
     except sr.UnknownValueError:
-        output_placeholder.text("Speech recognition failed. Please try again.")
+        st.markdown("<h2 style='color: #dc3545;'>Speech recognition failed. Please try again.</h2>", unsafe_allow_html=True)
     except sr.RequestError as e:
-        output_placeholder.text(f"Speech recognition error: {e}")
+        st.markdown(f"<h2 style='color: #dc3545;'>Speech recognition error: {e}</h2>", unsafe_allow_html=True)
     except Exception as e:
-        output_placeholder.text(f"An error occurred: {e}")
+        st.markdown(f"<h2 style='color: #dc3545;'>An error occurred: {e}</h2>", unsafe_allow_html=True)
 
 # UI layout
 st.set_page_config(page_title="Language Translator", page_icon="🌍")
@@ -89,15 +96,20 @@ st.markdown(
         border-radius: 10px;
         padding: 20px;
         margin: 10px 0;
-        max-height: 400px;
+        max-height: 300px;
         overflow-y: auto;
         backdrop-filter: blur(10px); 
         -webkit-backdrop-filter: blur(15px);
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
     }}
+    h2 {{
+        margin-top: 0px; 
+        padding-top: 0px; 
+    }}
     div.element-container div.stMarkdown p {{
-        margin-bottom: 10px;
+        margin: 10px 0;
         padding: 5px;
+        border-bottom: 1px solid rgba(200, 200, 200, 0.4);
     }}
     </style>
     """,
