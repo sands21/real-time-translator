@@ -35,8 +35,8 @@ pip install streamlit pygame gTTS googletrans==3.1.0a0 SpeechRecognition
 1. **Clone the repository** and navigate to the project directory.
 
    ```bash
-   git clone https://github.com/yourusername/yourrepo.git
-   cd yourrepo
+   git clone https://github.com/sands21/real-time-translator.git
+   cd real-time-translator
    ```
 
 2. **Start the Streamlit App**:
