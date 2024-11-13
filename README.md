@@ -1,6 +1,6 @@
 # 🌍 Language Translator Web App
 
-[![Demo Video](https://img.youtube.com/vi/Q4gFux8JrkI/0.jpg)](https://www.youtube.com/watch?v=Q4gFux8JrkI)
+[Demo Video](https://www.youtube.com/watch?v=Q4gFux8JrkI)
 
 This project is a real-time speech-to-speech language translator web app built with Streamlit, Google Text-to-Speech, and Google Translate APIs. The app allows users to select input and output languages, translate spoken words into the desired language, and play back the translated speech.
 
