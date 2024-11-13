@@ -40,7 +40,7 @@ pip install streamlit pygame gTTS googletrans==3.1.0a0 SpeechRecognition
 2. **Start the Streamlit App**:
 
    ```bash
-   streamlit run app.py
+   streamlit run main.py
    ```
 
 3. **Access the app** at `http://localhost:8501` on your browser.
