@@ -54,7 +54,7 @@ pip install streamlit pygame gTTS googletrans==3.1.0a0 SpeechRecognition
 
 ## 📁 File Structure
 
-- `app.py` - Main application script.
+- `main.py` - Main application script.
 - `README.md` - Documentation for the project.
 
 ## 📝 Notes
