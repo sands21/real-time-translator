@@ -2,4 +2,4 @@ gtts
 pygame
 streamlit
 speechrecognition
-googletrans==3.1.0a0
+googletrans==3.1.0a0 
