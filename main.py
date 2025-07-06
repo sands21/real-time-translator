@@ -5,8 +5,6 @@ import streamlit as st
 import speech_recognition as sr
 from googletrans import LANGUAGES, Translator
 
-is_translate_on = False  
-
 translator = Translator()  # Initializing the translator module
 
 # Create a mapping between language names and language codes
@@ -39,21 +37,26 @@ def text_to_voice(text_data, to_language):
     # Play audio using Streamlit's built-in audio player with autoplay
     st.audio(audio_buffer, format="audio/mp3", autoplay=True)
 
-def main_process(output_placeholder, from_language, to_language):
-    global is_translate_on
-
+def process_audio(audio_bytes, from_language, to_language):
+    """Process uploaded audio and perform translation"""
     if "conversation" not in st.session_state:
         st.session_state.conversation = []
 
-    with st.spinner('Listening...'):
-        rec = sr.Recognizer()
-        with sr.Microphone() as source:
-            rec.pause_threshold = 1
-            audio = rec.listen(source, phrase_time_limit=300)
+    if audio_bytes is None:
+        st.warning("Please record some audio first.")
+        return
 
     try:
-        with st.spinner('Processing...'):
-            # Use the correct language code for speech recognition
+        with st.spinner('Processing audio...'):
+            # Use speech recognition on the uploaded audio
+            rec = sr.Recognizer()
+            
+            # Convert audio bytes to AudioFile
+            audio_file = sr.AudioFile(audio_bytes)
+            with audio_file as source:
+                audio = rec.record(source)
+            
+            # Recognize speech
             spoken_text = rec.recognize_google(audio, language=from_language)
 
         with st.spinner('Translating...'):
@@ -128,12 +131,15 @@ to_language_name = col2.selectbox("To Language:", list(LANGUAGES.values()))
 from_language = get_language_code(from_language_name)
 to_language = get_language_code(to_language_name)
 
-# Creating a container for buttons and use columns for horizontal placements
-button_container = st.container()
-col3, col4 = button_container.columns(2)
+# Audio input widget for cloud-compatible speech recognition
+st.header("🎤 Record Your Voice")
+audio_bytes = st.audio_input("Record your message to translate", key="audio_input")
 
-start_button = col3.button("Start")
-stop_button = col4.button("Stop")
+# Process audio when uploaded
+if audio_bytes is not None:
+    # Convert audio_bytes to BytesIO for speech recognition
+    audio_buffer = io.BytesIO(audio_bytes.read())
+    process_audio(audio_buffer, from_language, to_language)
 
 # Create history container
 history_container = st.container()
@@ -142,14 +148,3 @@ with history_container:
     if "conversation" in st.session_state:
         for line in reversed(st.session_state.conversation):
             st.markdown(f"{line}", unsafe_allow_html=True)
-
-# Check if "Start" button is clicked
-if start_button:
-    if not is_translate_on:
-        is_translate_on = True
-        output_placeholder = st.empty()
-        main_process(output_placeholder, from_language, to_language)
-
-# Check if "Stop" button is clicked
-if stop_button:
-    is_translate_on = False
